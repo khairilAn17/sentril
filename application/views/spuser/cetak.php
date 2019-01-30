@@ -1,15 +1,4 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Cetak KHS</title>
-    <style>
-    	
-      body{
-        font-size: 0.9em;
-      }
-    </style>
-  </head>
- <body>
 <center><h2>Tabel Kegiatan</h2></center><br><br>
 <table width="100%" border="1" cellspacing="-0.5" cellpadding="5" border="0">
         <tr>
@@ -47,78 +36,6 @@
         	<td><?php echo $rows['keterangan'];?></td>
         </tr>
       	<?php };?>
-      <?php 
-           foreach ($row1 as $rows) {?>
-          <tr>
-            <td><?php echo $no++;?></td>
-            <td><?php echo $rows['id_kegiatan'];?></td>
-            <td><?php echo $rows['nama_kegiatan'];?></td>
-            <td><?php echo $rows['target'];?></td>
-            <td><?php echo $rows['realisasi'];?></td>
-            <td><?php echo ($rows['target']-$rows['realisasi']);?></td>
-            <td><?php echo "Rp.".number_format($rows['anggaran'],0,'','.');?></td>
-            <td><?php echo "Rp.".number_format($rows['realisasi_anggaran'],0,'','.');?></td>
-            <td><?php echo "Rp.".number_format($rows['anggaran']-$rows['realisasi_anggaran'],0,'','.');?></td>
-            <td><?php echo $rows['tanggal'];?></td>
-            <td><?php echo $rows['lokasi'];?></td>
-            <td><?php echo $rows['nama_pj'];?></td>
-          <td><?php echo $rows['keterangan'];?></td>
-        </tr>
-        <?php }?>
-        <?php 
-           foreach ($row2 as $rows) {?>
-          <tr>
-            <td><?php echo $no++;?></td>
-            <td><?php echo $rows['id_kegiatan'];?></td>
-            <td><?php echo $rows['nama_kegiatan'];?></td>
-            <td><?php echo $rows['target'];?></td>
-            <td><?php echo $rows['realisasi'];?></td>
-            <td><?php echo ($rows['target']-$rows['realisasi']);?></td>
-            <td><?php echo "Rp.".number_format($rows['anggaran'],0,'','.');?></td>
-            <td><?php echo "Rp.".number_format($rows['realisasi_anggaran'],0,'','.');?></td>
-            <td><?php echo "Rp.".number_format($rows['anggaran']-$rows['realisasi_anggaran'],0,'','.');?></td>
-            <td><?php echo $rows['tanggal'];?></td>
-            <td><?php echo $rows['lokasi'];?></td>
-            <td><?php echo $rows['nama_pj'];?></td>
-          <td><?php echo $rows['keterangan'];?></td>
-        </tr>
-        <?php }?>
-        <?php 
-           foreach ($row3 as $rows) {?>
-          <tr>
-            <td><?php echo $no++;?></td>
-            <td><?php echo $rows['id_kegiatan'];?></td>
-            <td><?php echo $rows['nama_kegiatan'];?></td>
-            <td><?php echo $rows['target'];?></td>
-            <td><?php echo $rows['realisasi'];?></td>
-            <td><?php echo ($rows['target']-$rows['realisasi']);?></td>
-            <td><?php echo "Rp.".number_format($rows['anggaran'],0,'','.');?></td>
-            <td><?php echo "Rp.".number_format($rows['realisasi_anggaran'],0,'','.');?></td>
-            <td><?php echo "Rp.".number_format($rows['anggaran']-$rows['realisasi_anggaran'],0,'','.');?></td>
-            <td><?php echo $rows['tanggal'];?></td>
-            <td><?php echo $rows['lokasi'];?></td>
-            <td><?php echo $rows['nama_pj'];?></td>
-          <td><?php echo $rows['keterangan'];?></td>
-        </tr>
-        <?php }?>
-        <?php 
-           foreach ($row4 as $rows) {?>
-          <tr>
-            <td><?php echo $no++;?></td>
-            <td><?php echo $rows['id_kegiatan'];?></td>
-            <td><?php echo $rows['nama_kegiatan'];?></td>
-            <td><?php echo $rows['target'];?></td>
-            <td><?php echo $rows['realisasi'];?></td>
-            <td><?php echo ($rows['target']-$rows['realisasi']);?></td>
-            <td><?php echo "Rp.".number_format($rows['anggaran'],0,'','.');?></td>
-            <td><?php echo "Rp.".number_format($rows['realisasi_anggaran'],0,'','.');?></td>
-            <td><?php echo "Rp.".number_format($rows['anggaran']-$rows['realisasi_anggaran'],0,'','.');?></td>
-            <td><?php echo $rows['tanggal'];?></td>
-            <td><?php echo $rows['lokasi'];?></td>
-            <td><?php echo $rows['nama_pj'];?></td>
-          <td><?php echo $rows['keterangan'];?></td>
-        </tr>
-        <?php }?>
 	</table>
   <br><br>
   <table>
@@ -143,7 +60,4 @@
         <td> : </td>
         <td><?php echo "Rp. ".number_format($total['total_anggaran']-$subtotal['sisa_anggaran'],0,'','.');?></td>
       </tr>
-     
     </table>
-</body>
-</html>

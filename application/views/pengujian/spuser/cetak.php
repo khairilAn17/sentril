@@ -1,15 +1,4 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Cetak KHS</title>
-    <style>
-    	
-      body{
-        font-size: 0.9em;
-      }
-    </style>
-  </head>
- <body>
 <center><h2>Tabel Kegiatan</h2></center><br><br>
 <table width="100%" border="1" cellspacing="-0.5" cellpadding="5" border="0">
         <tr>
@@ -73,5 +62,3 @@
       </tr>
      
     </table>
-</body>
-</html>

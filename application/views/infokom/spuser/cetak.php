@@ -1,15 +1,4 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Cetak KHS</title>
-    <style>
-    	
-      body{
-        font-size: 0.9em;
-      }
-    </style>
-  </head>
- <body>
 <center><h2>Tabel Kegiatan</h2></center><br><br>
 <table width="100%" border="1" cellspacing="-0.5" cellpadding="5" border="0">
         <tr>
@@ -70,8 +59,5 @@
         <td>Total Sisa Anggaran</td>
         <td> : </td>
         <td><?php echo "Rp. ".number_format($total['total_anggaran']-$subtotal['sisa_anggaran'],0,'','.');?></td>
-      </tr>
-     
+      </tr>   
     </table>
-</body>
-</html>

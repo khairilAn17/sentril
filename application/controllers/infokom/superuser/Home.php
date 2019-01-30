@@ -1097,7 +1097,7 @@ class Home extends CI_Controller {
 			$data['row'] = $this->infokom_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj", "tanggal", $param, 2018)->result_array();
 			$data['total'] = $this->infokom_model->get_total_kegiatan(2018)->row_array();
 			$data['subtotal'] = $this->infokom_model->get_total_subkegiatan(2018)->row_array();
-			$this->load->view("spuser/cetak",$data);
+			$this->load->view("infokom/spuser/cetak",$data);
 			
 	      	$paper_size  = 'A4'; //paper size
 	        $orientation = 'landscape'; //tipe format kertas
@@ -1121,7 +1121,7 @@ class Home extends CI_Controller {
 				$data['row'] = $this->infokom_model->get_all_data("tbl_kegiatan_infokom","tanggal",2019)->result_array();
 				$data['total'] = $this->infokom_model->get_total_kegiatan(2019)->row_array();
 				$data['subtotal'] = $this->infokom_model->get_total_subkegiatan(2019)->row_array();
-				$this->load->view("spuser/cetak",$data);
+				$this->load->view("infokom/spuser/cetak",$data);
 				
 		      	$paper_size  = 'A4'; //paper size
 		        $orientation = 'landscape'; //tipe format kertas
@@ -1138,7 +1138,7 @@ class Home extends CI_Controller {
 			$data['row'] = $this->infokom_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj", "tanggal", $param, 2019)->result_array();
 			$data['total'] = $this->infokom_model->get_total_kegiatan(2019)->row_array();
 			$data['subtotal'] = $this->infokom_model->get_total_subkegiatan(2019)->row_array();
-			$this->load->view("spuser/cetak",$data);
+			$this->load->view("infokom/spuser/cetak",$data);
 			
 	      	$paper_size  = 'A4'; //paper size
 	        $orientation = 'landscape'; //tipe format kertas
@@ -1162,7 +1162,7 @@ class Home extends CI_Controller {
 		$data['total'] = $this->infokom_model->get_total_kegiatan2($id)->row_array();
 		$data['subtotal'] = $this->infokom_model->get_total_subkegiatan2($id)->row_array();
 		$data['row'] = $this->infokom_model->get_subkegiatan($id)->result_array();
-		$this->load->view("spuser/cetak_sub",$data);
+		$this->load->view("infokom/spuser/cetak_sub",$data);
 		
       	$paper_size  = 'A4'; //paper size
         $orientation = 'landscape'; //tipe format kertas

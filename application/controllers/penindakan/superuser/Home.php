@@ -1079,7 +1079,7 @@ class Home extends CI_Controller {
 				$data['row'] = $this->penindakan_model->get_all_data("tbl_kegiatan_penindakan","tanggal",2018)->result_array();
 				$data['total'] = $this->penindakan_model->get_total_kegiatan(2018)->row_array();
 				$data['subtotal'] = $this->penindakan_model->get_total_subkegiatan(2018)->row_array();
-				$this->load->view("spuser/cetak",$data);
+				$this->load->view("penindakan/spuser/cetak",$data);
 				
 		      	$paper_size  = 'A4'; //paper size
 		        $orientation = 'landscape'; //tipe format kertas

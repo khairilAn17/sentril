@@ -1,15 +1,3 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Cetak KHS</title>
-    <style>
-      
-      body{
-        font-size: 0.9em;
-      }
-    </style>
-  </head>
- <body>
 <table>
     <tr>
       <td><b>Nama Kegiatan</b></td>
@@ -35,7 +23,6 @@
   </table>
   <br><br>
   <table cellspacing="-1" width="100%" border="1" cellpadding="5">
-    <thead>
       <tr>
        <th>No</th>
         <th>Tanggal Kegiatan</th>
@@ -47,8 +34,6 @@
         <th>Keterangan</th>
         <th>File</th>
       </tr>
-    </thead>
-    <tbody>
       <!-- <input type="checkbox" id="check-all" class="flat"> -->
      <?php $i=1; foreach ($row as $rows) {?>
         <tr>
@@ -67,7 +52,4 @@
           <?php } ?>
         </tr>
      <?php }?>
-    </tbody>
   </table>
-</body>
-</html>
