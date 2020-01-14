@@ -35,8 +35,9 @@
                           <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">Pilih Tahun Kegiatan
                             <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                  <li><a href="<?php echo base_url();?>superuser/home/kegiatan/2018">2018</a></li>
-                                  <li><a href="<?php echo base_url();?>superuser/home/kegiatan/2019">2019</a></li>
+                                <?php foreach($tahun as $tahun1){ ?>
+                                  <li><a href="<?php echo base_url();?>superuser/home/kegiatanInfokom/<?=$tahun1->tahun?>"><?=$tahun1->tahun?></a></li>
+                                <?php  }?>
                                 </ul>
                           </div>
                       </div>
@@ -136,15 +137,15 @@
                       </tr>           
                     </table>
                     <br>
-                    <a href="<?=base_url('superuser/home/print_laporan'.$this->session->flashdata("unit"))?>" class="btn btn-success"><i class="fa fa fa-file-excel-o"></i> Semua Export</a>
+                    <a href="<?=base_url('superuser/home/print_laporanInfokom/'.$this->session->flashdata("tahun"))?>" class="btn btn-success"><i class="fa fa fa-file-excel-o"></i> Semua Export</a>
                     <?php foreach ($group as $key) { ?>
-                     <a href="<?=base_url('superuser/home/print_laporan'.$this->session->flashdata("unit").'/'.$key->nama_pj);?>" class="btn btn-success"><i class="fa fa fa-file-excel-o"></i> <?=$key->nama_pj ?> Export</a>
+                     <a href="<?=base_url('superuser/home/print_laporanInfokom/'.$this->session->flashdata("tahun").'/'.$key->nama_pj);?>" class="btn btn-success"><i class="fa fa fa-file-excel-o"></i> <?=$key->nama_pj ?> Export</a>
                     <?php } ?>
-                    <a href="<?=base_url('superuser/home/cetak_pdf'.$this->session->flashdata("unit"));?>" target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> Semua Pdf</a>
+                    <a href="<?=base_url('superuser/home/cetak_pdfinfokom/'.$this->session->flashdata("tahun"));?>" target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> Semua Pdf</a>
                     <?php foreach ($group as $key) {
                       
                     ?>
-                    <a href="<?php echo base_url();?>superuser/home/cetak_pdf<?=$this->session->flashdata("unit")?>/<?=$key->nama_pj?>"  target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> <?=$key->nama_pj;?> Pdf</a>
+                    <a href="<?php echo base_url();?>superuser/home/cetak_pdfinfokom/<?=$this->session->flashdata("tahun")?>/<?=$key->nama_pj?>"  target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> <?=$key->nama_pj;?> Pdf</a>
                     <?php } ?>
                  </div>
                 </div>

@@ -79,7 +79,7 @@
                   </li>
                   <li><a><i class="fa fa-table"></i> Tabel Kegiatan <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="<?php echo base_url();?>penindakan/superuser/home/kegiatan/2019">Kegiatan</a></li>
+                      <li><a href="<?php echo base_url();?>penindakan/superuser/home/kegiatan/<?= date('Y')?>">Kegiatan</a></li>
                       <li><a href="<?=base_url('penindakan/superuser/home/log_subkegiatan')?>">Sub Kegiatan</a></li>
                       <li><a href="<?=base_url('penindakan/superuser/home/tambah_anggaran')?>">Tambah Anggaran</a>
                       </li>

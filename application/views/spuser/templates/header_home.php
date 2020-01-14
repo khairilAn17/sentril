@@ -70,7 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </li>
                   <li><a><i class="fa fa-table"></i> Tabel Kegiatan <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="<?php echo base_url();?>superuser/home/kegiatan/2019">Kegiatan</a></li>
+                      <li><a href="<?php echo base_url();?>superuser/home/kegiatan/<?=date('Y')?>">Kegiatan</a></li>
                       <li><a href="<?=base_url('superuser/home/log_subkegiatan')?>">Sub Kegiatan</a></li>
                       <li><a href="<?=base_url('superuser/home/tambah_anggaran')?>">Tambah Anggaran</a></li>
                       <li><a href="<?=base_url('superuser/home/kurangi_anggaran')?>">Kurangi Anggaran</a></li>

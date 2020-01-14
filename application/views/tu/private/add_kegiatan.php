@@ -48,7 +48,7 @@
                           <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input id="lokasi" type="text" name="tanggal" placeholder="contoh : 1 januari 2019"  class="form-control col-md-7 col-xs-12" required="required">
+                          <input id="lokasi" type="text" name="tanggal" placeholder="contoh : 1 januari <?php echo date('Y');?>"  class="form-control col-md-7 col-xs-12" required="required">
                         </div>
                       </div>
                       <div class="item form-group">

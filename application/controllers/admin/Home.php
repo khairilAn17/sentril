@@ -37,6 +37,7 @@ class Home extends CI_Controller {
 
 	public function add_kegiatan(){
 		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan", "tanggal", 2019)->result_array();
+		$data['tahun'] = $this->db->query('SELECT * FROM tbl_tahun')->result();
 		//var_dump($data);die;
 		$this->load->view('private/templates/header_insert');
 		$this->load->view('private/add_kegiatan',$data);
@@ -57,7 +58,8 @@ class Home extends CI_Controller {
 		$anggaran = $this->input->post('anggaran');
 		$tgl = $this->input->post('tanggal')  ;
 		$tgl_input = date("d-M-Y");
-		$tahun = date("Y");
+		$tahun = $this->input->post('tahun');
+		var_dump($tahun);die;
 		//var_dump($tahun);die;
 		$lokasi = $this->input->post('lokasi');
 		$pj = $this->input->post('pj');

@@ -24,11 +24,12 @@ class Home extends CI_Controller {
 
 	public function kegiatan()
 	{
-		$data['total'] = $this->infokom_model->get_total_kegiatan(2019)->row_array();
-		$data['subtotal'] = $this->infokom_model->get_total_subkegiatan(2019)->row_array();
-		$data['row'] = $this->infokom_model->get_all_data("tbl_kegiatan_infokom", "tanggal", 2019)->result_array();
-		$data['group'] = $this->infokom_model->get_group(2019);
-		$this->session->set_flashdata('tahun', '2019');
+		$tahun = date("Y");
+		$data['total'] = $this->infokom_model->get_total_kegiatan($tahun)->row_array();
+		$data['subtotal'] = $this->infokom_model->get_total_subkegiatan($tahun)->row_array();
+		$data['row'] = $this->infokom_model->get_all_data("tbl_kegiatan_infokom", "tanggal", $tahun)->result_array();
+		$data['group'] = $this->infokom_model->get_group($tahun);
+		$this->session->set_flashdata('tahun', $tahun);
 		//var_dump($data);die;
 		$this->load->view('infokom/private/templates/header_table');
 		$this->load->view('infokom/private/kegiatan',$data);
@@ -36,7 +37,8 @@ class Home extends CI_Controller {
 	}
 
 	public function add_kegiatan(){
-		$data['row'] = $this->infokom_model->get_all_data("tbl_kegiatan_infokom", "tanggal", 2019)->result_array();
+		$tahun = date('Y');
+		$data['row'] = $this->infokom_model->get_all_data("tbl_kegiatan_infokom", "tanggal", $tahun)->result_array();
 		//var_dump($data);die;
 		$this->load->view('infokom/private/templates/header_insert');
 		$this->load->view('infokom/private/add_kegiatan',$data);
@@ -275,9 +277,10 @@ class Home extends CI_Controller {
  //        $obj_writer->save('php://output');
 	// }
 
-	function print_laporan2019($param=''){
+	function print_laporan($tahun,$param=''){
 		$this->load->library('PHPExcel');
-		$pj = $this->infokom_model->get_all_data("tbl_kegiatan_infokom", "tanggal", 2019)->result();
+		$pj = $this->infokom_model->get_all_data("tbl_kegiatan_infokom", "tanggal", $tahun)->result();
+		$urldecode = urldecode($param);
 		foreach ($pj as $key) {	
 				if($param== $key->nama_pj){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
@@ -351,9 +354,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->infokom_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->infokom_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->infokom_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->infokom_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj","tanggal", $param, $tahun)->result_array();
+					$total = $this->infokom_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->infokom_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -463,9 +466,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->infokom_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->infokom_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->infokom_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->infokom_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj","tanggal", $param, $tahun)->result_array();
+					$total = $this->infokom_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->infokom_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -622,12 +625,14 @@ class Home extends CI_Controller {
  //        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));
 	// }
 
-	function cetak_pdf2019($param=''){
-		$pj = $this->infokom_model->get_all_data("tbl_kegiatan_infokom", "tanggal", 2019)->result();
+	function cetak_pdf($tahun,$param=''){
+		$tahun = date('Y');
+		$pj = $this->infokom_model->get_all_data("tbl_kegiatan_infokom", "tanggal", $tahun)->result();
+		$urldecode = urldecode($param);
 		if ($param == '') {
-				$data['row'] = $this->infokom_model->get_all_data("tbl_kegiatan_infokom","tanggal",2019)->result_array();
-				$data['total'] = $this->infokom_model->get_total_kegiatan(2019)->row_array();
-				$data['subtotal'] = $this->infokom_model->get_total_subkegiatan(2019)->row_array();
+				$data['row'] = $this->infokom_model->get_all_data("tbl_kegiatan_infokom","tanggal",$tahun)->result_array();
+				$data['total'] = $this->infokom_model->get_total_kegiatan($tahun)->row_array();
+				$data['subtotal'] = $this->infokom_model->get_total_subkegiatan($tahun)->row_array();
 				$this->load->view("infokom/spuser/cetak",$data);
 				
 		      	$paper_size  = 'A4'; //paper size
@@ -642,9 +647,9 @@ class Home extends CI_Controller {
 			}
 		foreach ($pj as $key) {
 			if ($param == $key->nama_pj) {
-			$data['row'] = $this->infokom_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj", "tanggal", $param, 2019)->result_array();
-			$data['total'] = $this->infokom_model->get_total_kegiatan(2019)->row_array();
-			$data['subtotal'] = $this->infokom_model->get_total_subkegiatan(2019)->row_array();
+			$data['row'] = $this->infokom_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj", "tanggal", $param, $tahun)->result_array();
+			$data['total'] = $this->infokom_model->get_total_kegiatan($tahun)->row_array();
+			$data['subtotal'] = $this->infokom_model->get_total_subkegiatan($tahun)->row_array();
 			$this->load->view("infokom/spuser/cetak",$data);
 			
 	      	$paper_size  = 'A4'; //paper size

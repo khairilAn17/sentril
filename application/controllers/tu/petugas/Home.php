@@ -21,13 +21,14 @@ class Home extends CI_Controller {
 		$this->load->view('tu/public/templates/footer_home');
 	}
 
-	public function kegiatan()
+	public function kegiatan($tahun="")
 	{
-		$data['total'] = $this->tu_model->get_total_kegiatan(2019)->row_array();
-		$data['subtotal'] = $this->tu_model->get_total_subkegiatan(2019)->row_array();
-		$data['row'] = $this->tu_model->get_all_data("tbl_kegiatan_tu", "tanggal", 2019)->result_array();
-    $data['group'] = $this->tu_model->get_group(2019);
-    $this->session->set_flashdata('tahun', '2019');
+    $tahun = date('Y');
+		$data['total'] = $this->tu_model->get_total_kegiatan($tahun)->row_array();
+		$data['subtotal'] = $this->tu_model->get_total_subkegiatan($tahun)->row_array();
+		$data['row'] = $this->tu_model->get_all_data("tbl_kegiatan_tu", "tanggal", $tahun)->result_array();
+    $data['group'] = $this->tu_model->get_group($tahun);
+    $this->session->set_flashdata('tahun', $tahun);
 		//var_dump($data);die;
 		$this->load->view('tu/public/templates/header_table');
 		$this->load->view('tu/public/kegiatan',$data);
@@ -67,9 +68,9 @@ class Home extends CI_Controller {
 		$this->load->view('tu/public/cari_kegiatan_ajax',$data);
 	}
 
-	function print_laporan(){
+	function print_laporan($tahun, $param=""){
     $this->load->library('PHPExcel');
-
+    $urldecode = urldecode($param);
      $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))
         ->setCellValue('A2', 'Kode')
         ->setCellValue('B2', 'Nama Kegiatan')
@@ -142,9 +143,9 @@ class Home extends CI_Controller {
         $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
         $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-        $detail = $this->tu_model->get_all_data("tbl_kegiatan_tu")->result_array();
-    $total = $this->tu_model->get_total_kegiatan()->row_array();
-    $subtotal = $this->tu_model->get_total_subkegiatan()->row_array();
+    $detail = $this->tu_model->get_all_data("tbl_kegiatan_tu","nama_pj","tanggal", $urldecode, $tahun)->result_array();
+    $total = $this->tu_model->get_total_kegiatan($tahun)->row_array();
+    $subtotal = $this->tu_model->get_total_subkegiatan($tahun)->row_array();
 
     $row=3;
     foreach($detail as $data){
@@ -298,12 +299,13 @@ class Home extends CI_Controller {
   //       $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));
   // }
 
-  function cetak_pdf2019($param=''){
-    $pj = $this->tu_model->get_all_data("tbl_kegiatan_tu", "tanggal", 2019)->result();
-    if ($param == '') {
-        $data['row'] = $this->tu_model->get_all_data("tbl_kegiatan_tu","tanggal",2019)->result_array();
-        $data['total'] = $this->tu_model->get_total_kegiatan(2019)->row_array();
-        $data['subtotal'] = $this->tu_model->get_total_subkegiatan(2019)->row_array();
+  function cetak_pdf($tahun,$param=''){
+    $pj = $this->tu_model->get_all_data("tbl_kegiatan_tu", "tanggal", $tahun)->result();
+    $urldecode = urldecode($param);
+    if ($urldecode == '') {
+        $data['row'] = $this->tu_model->get_all_data("tbl_kegiatan_tu","tanggal",$tahun)->result_array();
+        $data['total'] = $this->tu_model->get_total_kegiatan($tahun)->row_array();
+        $data['subtotal'] = $this->tu_model->get_total_subkegiatan($tahun)->row_array();
         $this->load->view("tu/spuser/cetak",$data);
         
             $paper_size  = 'A4'; //paper size
@@ -317,10 +319,10 @@ class Home extends CI_Controller {
             $this->dompdf->stream("laporan.pdf", array('Attachment'=>0)); 
       }
     foreach ($pj as $key) {
-      if ($param == $key->nama_pj) {
-      $data['row'] = $this->tu_model->get_all_data2019("tbl_kegiatan_tu", "nama_pj", "tanggal", $key->nama_pj, 2019)->result_array();
-      $data['total'] = $this->tu_model->get_total_kegiatan(2019)->row_array();
-      $data['subtotal'] = $this->tu_model->get_total_subkegiatan(2019)->row_array();
+      if ($urldecode == $key->nama_pj) {
+      $data['row'] = $this->tu_model->get_all_data2019("tbl_kegiatan_tu", "nama_pj", "tanggal", $key->nama_pj, $tahun)->result_array();
+      $data['total'] = $this->tu_model->get_total_kegiatan($tahun)->row_array();
+      $data['subtotal'] = $this->tu_model->get_total_subkegiatan($tahun)->row_array();
       $this->load->view("tu/spuser/cetak",$data);
       
           $paper_size  = 'A4'; //paper size
@@ -333,7 +335,7 @@ class Home extends CI_Controller {
           $this->dompdf->render();
           $this->dompdf->stream("laporan.pdf", array('Attachment'=>0)); 
       } 
-      if ($param == $key->nama_pj) {
+      if ($urldecode == $key->nama_pj) {
         break;
       }
     }     

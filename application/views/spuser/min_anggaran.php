@@ -1,9 +1,25 @@
                   <div class="x_content">
-
+                  <form class="form-horizontal form-label-left" action="<?=base_url('superuser/home/kurangi_anggaran')?>" method="POST">
+                  <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id">Tahun <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="dropdown">
+                          <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">Pilih Tahun Kegiatan
+                            <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                <?php foreach($tahun as $tahun1){ ?>
+                                  <li><a href="<?php echo base_url();?>superuser/home/kurangi_anggaran/<?=$tahun1->tahun?>"><?=$tahun1->tahun?></a></li>
+                                  <?php  }?>
+                                </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
                     <form class="form-horizontal form-label-left" novalidate method="post" action="<?=base_url('superuser/home/kurangi_anggaran_proccess')?>" id="aas">
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id">ID Kegiatan <span class="required">*</span>
-                        </label>
+                        </label> 
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <select id="inputN" class="form-control col-md-7 col-xs-12" name="id" placeholder="id kegiatan" type="text" required="required">
                             <?php foreach($row as $rows){?>

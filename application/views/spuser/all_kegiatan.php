@@ -225,7 +225,7 @@
                    <!--  <?php foreach ($group as $key) { ?>
                      <a href="<?=base_url('superuser/home/print_laporan'.$this->session->flashdata("tahun").'/'.$key->nama_pj);?>" class="btn btn-success"><i class="fa fa fa-file-excel-o"></i> <?=$key->nama_pj ?> Export</a>
                     <?php } ?> -->
-                    <a href="<?=base_url('superuser/home/cetak_pdf')?>" target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> Semua Pdf</a>
+                    <a href="<?=base_url('superuser/home/cetak_pdf1')?>" target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> Semua Pdf</a>
                     <!-- <?php foreach ($group as $key) {
                       
                     ?>

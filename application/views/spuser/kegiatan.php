@@ -7,41 +7,42 @@
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
-                      <!-- <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li> -->
-                      <!-- <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li> -->
                       <li>
                           <a href="<?=base_url('superuser/home/add_kegiatan')?>">
                             <button class="btn btn-primary">
                             <i class="fa fa-plus"></i> Tambah
-                          </button>
+                            </button>
+                          </a>
                           </a>
                         </a>  
                       </li>
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                 <div class="container-fluid">
+                  
+                 <div class="container-fluid ">
                     <div class="x_content">
-                        <div class="dropdown">
-                          <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">Pilih Tahun Kegiatan
+                        <div class="col-md-8 col-sm-8 dropdown">
+                          <button class="btn btn-dark dropdown-toggle " type="button" data-toggle="dropdown">Pilih Tahun Kegiatan
                             <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                  <li><a href="<?php echo base_url();?>superuser/home/kegiatan/2018">2018</a></li>
-                                  <li><a href="<?php echo base_url();?>superuser/home/kegiatan/2019">2019</a></li>
+                                <?php foreach($tahun as $tahun){?>
+                                  <li><a href="<?php echo base_url();?>superuser/home/kegiatan/<?=$tahun->tahun?>"><?=$tahun->tahun?></a></li>
+                                  <!-- <li><a href="<?php echo base_url();?>superuser/home/kegiatan/2019">2019</a></li> -->
+                                <?php }?>
+                                </ul>
+                          </div>
+                          <div class="col-md-4 col-sm-4 dropdown float-right">
+                          <button class="btn btn-dark dropdown-toggle " type="button" data-toggle="dropdown">Pilih Urutan
+                            <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                  <li><a href="<?php echo base_url();?>superuser/home/kegiatan/<?=$this->session->flashdata("tahun");?>/DESC">Input Terbaru</a></li>
+                                  <li><a href="<?php echo base_url();?>superuser/home/kegiatan/<?=$this->session->flashdata("tahun")?>/ASC">Input Terlama</a></li>
                                 </ul>
                           </div>
                       </div>
                 </div>
-
+                
 
               <div class="x_content">
               <?php if(isset($pesan)){
@@ -137,15 +138,15 @@
                      
                     </table>
                     <br>
-                    <a href="<?=base_url('superuser/home/print_laporan'.$this->session->flashdata("tahun"))?>" class="btn btn-success"><i class="fa fa fa-file-excel-o"></i> Semua Export</a>
+                    <a href="<?=base_url('superuser/home/print_laporan/'.$this->session->flashdata("tahun"))?>" class="btn btn-success"><i class="fa fa fa-file-excel-o"></i> Semua Export</a>
                     <?php foreach ($group as $key) { ?>
-                     <a href="<?=base_url('superuser/home/print_laporan'.$this->session->flashdata("tahun").'/'.$key->nama_pj);?>" class="btn btn-success"><i class="fa fa fa-file-excel-o"></i> <?=$key->nama_pj ?> Export</a>
+                     <a href="<?=base_url('superuser/home/print_laporan/'.$this->session->flashdata("tahun").'/'.$key->nama_pj);?>" class="btn btn-success"><i class="fa fa fa-file-excel-o"></i> <?=$key->nama_pj ?> Export</a>
                     <?php } ?>
-                    <a href="<?=base_url('superuser/home/cetak_pdf'.$this->session->flashdata("tahun"));?>" target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> Semua Pdf</a>
+                    <a href="<?=base_url('superuser/home/cetak_pdf/'.$this->session->flashdata("tahun"));?>" target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> Semua Pdf</a>
                     <?php foreach ($group as $key) {
                       
                     ?>
-                    <a href="<?php echo base_url();?>superuser/home/cetak_pdf<?=$this->session->flashdata("tahun")?>/<?=$key->nama_pj?>"  target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> <?=$key->nama_pj;?> Pdf</a>
+                    <a href="<?php echo base_url();?>superuser/home/cetak_pdf/<?=$this->session->flashdata("tahun")?>/<?=$key->nama_pj?>"  target="blank" class="btn btn-danger"><i class="fa fa fa-file-pdf-o"></i> <?=$key->nama_pj;?> Pdf</a>
                     <?php } ?>
                  </div>
                 </div>

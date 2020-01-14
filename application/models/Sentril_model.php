@@ -22,9 +22,17 @@ class sentril_model extends CI_Model{
 	public function get_data($table,$id,$val){
 		return $this->db->where($id,$val)->get($table);
 	}
-
+	public function get_all($table){
+		$query = $this->db->get($table);
+		return $query->result();
+	}
 	public function get_all_data($table,$field, $var){
 		$this->db->LIKE($field, $var, 'both');
+		return $this->db->get($table);
+	}
+	public function get_all_data_order($table,$field, $var,$order){
+		$this->db->LIKE($field, $var, 'both');
+		$this->db->order_by('id_kegiatan', $order);
 		return $this->db->get($table);
 	}
 	public function get_all_data2019($table,$field,$field2,$var, $var2){

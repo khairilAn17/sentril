@@ -1,6 +1,6 @@
                   <div class="x_content">
 
-                    <form class="form-horizontal form-label-left" novalidate method="post" action="<?=base_url('superuser/home/insert_proccess')?>" id="aas">
+                    <form class="form-horizontal form-label-left" novalidate method="post" action="<?=base_url('superuser/home/tambah_anggaran')?>" id="aas">
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id">ID Kegiatan <span class="required">*</span>
                         </label>

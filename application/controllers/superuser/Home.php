@@ -21,24 +21,42 @@ class Home extends CI_Controller {
 		$this->load->view('spuser/templates/footer_home');
 	}
 	public function all_kegiatan(){
-		$data['data1'] = $this->sentril_model->get_all_data("tbl_kegiatan_infokom","tanggal", 2019)->result_array();
-		$data['data2'] = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian","tanggal", 2019)->result_array();
-		$data['data3'] = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan","tanggal", 2019)->result_array();
-		$data['data4'] = $this->sentril_model->get_all_data("tbl_kegiatan_tu","tanggal", 2019)->result_array();
-		$data['data5'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal", 2019)->result_array();
-		$data['total'] = $this->sentril_model->get_total_kegiatan_all(2019)->row_array();
-		$data['subtotal'] = $this->sentril_model->get_total_subkegiatan_all(2019)->row_array();
-		$data['group'] = $this->sentril_model->get_group(2019);
-		$this->session->set_flashdata('tahun', '2019');
+	
+		$year = date('Y');
+		$data['data1'] = $this->sentril_model->get_all_data("tbl_kegiatan_infokom","tanggal", $year)->result_array();
+		$data['data2'] = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian","tanggal", $year)->result_array();
+		$data['data3'] = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan","tanggal", $year)->result_array();
+		$data['data4'] = $this->sentril_model->get_all_data("tbl_kegiatan_tu","tanggal", $year)->result_array();
+		$data['data5'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal", $year)->result_array();
+		$data['total'] = $this->sentril_model->get_total_kegiatan_all($year)->row_array();
+		$data['subtotal'] = $this->sentril_model->get_total_subkegiatan_all($year)->row_array();
+		$data['group'] = $this->sentril_model->get_group($year);
+		$this->session->set_flashdata('tahun', $year);
 		$this->load->view('spuser/templates/header_table');
 		$this->load->view('spuser/all_kegiatan',$data);
 		$this->load->view('spuser/templates/footer_table');
 		$this->load->view('spuser/kegiatan_script');
 	}
-	public function kegiatan($param="")
+	public function kegiatan($param="", $order="")
 	{
-		if($param==2018){
-
+		if($order == ""){
+			$order = "DESC";
+		}
+		// if($param==2018){
+			// $tahun = $this->sentril_model->get_all('tbl_tahun');
+			// foreach($tahun as $tahun){
+			// 	if(date('Y') != $tahun->tahun ){
+			// 		$year = date('Y');
+			// 		$query = $this->db->query("INSERT INTO tbl_tahun(tahun) VALUES('$year')");
+			// 		break;
+			// 	}
+			// }
+			$year = date('Y');
+			$tahun = $this->db->query("SELECT * FROM tbl_tahun WHERE tahun='$year'")->num_rows();
+				if($tahun < 1){
+						$year = date('Y');
+						$query = $this->db->query("INSERT INTO tbl_tahun(tahun) VALUES('$year')");
+				}
 			if(isset($_POST['ubah'])){
 				$id = $this->input->post('id');
 				$nama = $this->input->post('nama');
@@ -85,12 +103,13 @@ class Home extends CI_Controller {
 
 			}	
 				//$data['row'] = $this->sentril_model->get_kegiatan_su()->result_array();
-		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal", 2018)->result_array();
+		$data['row'] = $this->sentril_model->get_all_data_order("tbl_kegiatan","tanggal", $param , $order)->result_array();
 		//$data['row'] = $this->sentril_model->get_all_data_2018();
-		$data['total'] = $this->sentril_model->get_total_kegiatan(2018)->row_array();
-		$data['subtotal'] = $this->sentril_model->get_total_subkegiatan(2018)->row_array();
+		$data['total'] = $this->sentril_model->get_total_kegiatan($param)->row_array();
+		$data['subtotal'] = $this->sentril_model->get_total_subkegiatan($param)->row_array();
 		$data['group'] = $this->sentril_model->get_group($param);
-		$this->session->set_flashdata('tahun', '2018');
+		$data['tahun'] = $this->sentril_model->get_all('tbl_tahun');
+		$this->session->set_flashdata('tahun', $param);
 
 		
 		//var_dump($data);die;
@@ -98,67 +117,67 @@ class Home extends CI_Controller {
 		$this->load->view('spuser/kegiatan',$data);
 		$this->load->view('spuser/templates/footer_table');
 		$this->load->view('spuser/kegiatan_script');
-		}
+		//}
 
-		if($param==2019){
-			if(isset($_POST['ubah'])){
-				$id = $this->input->post('id');
-				$nama = $this->input->post('nama');
-				$target = $this->input->post('target');
-				$anggaran = $this->input->post('anggaran');
-				$tgl = $this->input->post('tanggal');
-				$lokasi = $this->input->post('lokasi');
-				$pj = $this->input->post('pj');
-				$ket = $this->input->post('keterangan');
+		// if($param==2019){
+		// 	if(isset($_POST['ubah'])){
+		// 		$id = $this->input->post('id');
+		// 		$nama = $this->input->post('nama');
+		// 		$target = $this->input->post('target');
+		// 		$anggaran = $this->input->post('anggaran');
+		// 		$tgl = $this->input->post('tanggal');
+		// 		$lokasi = $this->input->post('lokasi');
+		// 		$pj = $this->input->post('pj');
+		// 		$ket = $this->input->post('keterangan');
 
-				// $tgl = explode("-", $tgl);
-				$trget = str_replace(".", "",$target);
-				$anggrn = str_replace(".", "",$anggaran);
+		// 		// $tgl = explode("-", $tgl);
+		// 		$trget = str_replace(".", "",$target);
+		// 		$anggrn = str_replace(".", "",$anggaran);
 
-				// $bln["January"] = "01";
-				// $bln["February"] = "02";
-				// $bln["March"] = "03";
-				// $bln["April"] = "04";
-				// $bln["May"] = "05";
-				// $bln["June"] = "06";
-				// $bln["July"] = "07";
-				// $bln["August"] = "08";
-				// $bln["September"] = "09";
-				// $bln["October"] = "10";
-				// $bln["November"] = "11";
-				// $bln["December"] = "12";
+		// 		// $bln["January"] = "01";
+		// 		// $bln["February"] = "02";
+		// 		// $bln["March"] = "03";
+		// 		// $bln["April"] = "04";
+		// 		// $bln["May"] = "05";
+		// 		// $bln["June"] = "06";
+		// 		// $bln["July"] = "07";
+		// 		// $bln["August"] = "08";
+		// 		// $bln["September"] = "09";
+		// 		// $bln["October"] = "10";
+		// 		// $bln["November"] = "11";
+		// 		// $bln["December"] = "12";
 
-				// $tanggal = $tgl[2]."-".$bln[$tgl[1]]."-".$tgl[0];
-				//var_dump($tanggal);die;
-				$data = array(
-					'id_kegiatan'=>$id,
-					'nama_kegiatan'=>$nama,
-					'tanggal'=>$tgl,
-					'lokasi'=>$lokasi,
-					'nama_pj'=>$pj,
-					'keterangan'=>$ket
-				);
+		// 		// $tanggal = $tgl[2]."-".$bln[$tgl[1]]."-".$tgl[0];
+		// 		//var_dump($tanggal);die;
+		// 		$data = array(
+		// 			'id_kegiatan'=>$id,
+		// 			'nama_kegiatan'=>$nama,
+		// 			'tanggal'=>$tgl,
+		// 			'lokasi'=>$lokasi,
+		// 			'nama_pj'=>$pj,
+		// 			'keterangan'=>$ket
+		// 		);
 
-				if($this->sentril_model->update_kegiatan($data,$id)){
-					$data['pesan'] = 1;
-				}else{
-					$data['pesan'] = 0;
-				}
+		// 		if($this->sentril_model->update_kegiatan($data,$id)){
+		// 			$data['pesan'] = 1;
+		// 		}else{
+		// 			$data['pesan'] = 0;
+		// 		}
 
-			}	
-				//$data['row'] = $this->sentril_model->get_kegiatan_su()->result_array();
-		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal", 2019)->result_array();
-		$data['total'] = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-		$data['subtotal'] = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
-		$data['group'] = $this->sentril_model->get_group($param);
-		$this->session->set_flashdata('tahun', '2019');
+		// 	}	
+		// 		//$data['row'] = $this->sentril_model->get_kegiatan_su()->result_array();
+		// $data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal", 2019)->result_array();
+		// $data['total'] = $this->sentril_model->get_total_kegiatan(2019)->row_array();
+		// $data['subtotal'] = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+		// $data['group'] = $this->sentril_model->get_group($param);
+		// $this->session->set_flashdata('tahun', '2019');
 		
-		//var_dump($data);die;
-		$this->load->view('spuser/templates/header_table');
-		$this->load->view('spuser/kegiatan',$data);
-		$this->load->view('spuser/templates/footer_table');
-		$this->load->view('spuser/kegiatan_script');
-		}
+		// //var_dump($data);die;
+		// $this->load->view('spuser/templates/header_table');
+		// $this->load->view('spuser/kegiatan',$data);
+		// $this->load->view('spuser/templates/footer_table');
+		// $this->load->view('spuser/kegiatan_script');
+		// }
 
 	}
 
@@ -222,17 +241,24 @@ class Home extends CI_Controller {
 		redirect('superuser/home/user');
 	}
 
-	public function tambah_anggaran()
+	public function tambah_anggaran($tahun="")
 	{	
-		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan", "tanggal", 2019)->result_array();
+		if($tahun==""){
+			$tahun = date('Y');
+		}
+		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan", "tanggal", $tahun)->result_array();
+		$data['tahun'] = $this->db->query('SELECT * FROM tbl_tahun')->result();
 		$this->load->view('spuser/templates/header_insert');
 		$this->load->view('spuser/add_anggaran',$data);
 		$this->load->view('spuser/templates/footer_insert');
 	}
 
-	public function kurangi_anggaran()
-	{	
-		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan", "tanggal", 2019)->result_array();
+	public function kurangi_anggaran($tahun="")
+	{	if($tahun==""){
+		$tahun = date('Y');
+	}
+		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan", "tanggal", $tahun)->result_array();
+		$data['tahun'] = $this->db->query('SELECT * FROM tbl_tahun')->result();
 		$this->load->view('spuser/templates/header_insert');
 		$this->load->view('spuser/min_anggaran',$data);
 		$this->load->view('spuser/templates/footer_insert');
@@ -852,11 +878,11 @@ class Home extends CI_Controller {
 	//ending
 	}
 
-	function print_laporan2019($param=''){
+	function print_laporan($tahun,$param=''){
 		$this->load->library('PHPExcel');
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan", "tanggal", 2019)->result();
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan", "tanggal", $tahun)->result();
 		foreach ($pj as $key) {	
-				if($param== $key->nama_pj){
+				if(urldecode($param)== $key->nama_pj){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
 			        ->setCellValue('A2', 'Kode')
 			        ->setCellValue('B2', 'Nama Kegiatan')
@@ -928,9 +954,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
+					$total = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -966,7 +992,7 @@ class Home extends CI_Controller {
 			        $obj_writer = PHPExcel_IOFactory::createWriter($this->phpexcel, 'Excel2007');
 			        $obj_writer->save('php://output');
 				    	}
-				if($param== $key->nama_pj){break;}}
+				if(urldecode($param)== $key->nama_pj){break;}}
 
 					if($param== ''){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
@@ -1040,9 +1066,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
+					$total = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -1081,7 +1107,7 @@ class Home extends CI_Controller {
 	//ending
 	}
 
-	function print_laporan(){
+	function print_laporan1(){
 		$this->load->library('PHPExcel');
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
 			        ->setCellValue('A2', 'Kode')
@@ -1274,11 +1300,11 @@ class Home extends CI_Controller {
 	//ending
 	}
 
-	function print_laporanInfokom($param=''){
+	function print_laporanInfokom($tahun, $param=''){
 		$this->load->library('PHPExcel');
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_infokom", "tanggal", 2019)->result();
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_infokom", "tanggal", $tahun)->result();
 		foreach ($pj as $key) {	
-				if($param== $key->nama_pj){
+				if(urldecode($param)== $key->nama_pj){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
 			        ->setCellValue('A2', 'Kode')
 			        ->setCellValue('B2', 'Nama Kegiatan')
@@ -1350,7 +1376,7 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj","tanggal", $param, 2019)->result_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
 					$total = $this->sentril_model->get_total_kegiatanInfokom(2019)->row_array();
 					$subtotal = $this->sentril_model->get_total_subkegiatanInfokom(2019)->row_array();
 
@@ -1388,7 +1414,7 @@ class Home extends CI_Controller {
 			        $obj_writer = PHPExcel_IOFactory::createWriter($this->phpexcel, 'Excel2007');
 			        $obj_writer->save('php://output');
 				    	}
-				if($param== $key->nama_pj){break;}}
+				if(urldecode($param)== $key->nama_pj){break;}}
 
 					if($param== ''){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
@@ -1462,9 +1488,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
+					$total = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -1503,11 +1529,11 @@ class Home extends CI_Controller {
 	//ending
 	}
 
-	function print_laporanTu($param=''){
+	function print_laporanTu($tahun, $param=''){
 		$this->load->library('PHPExcel');
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_tu", "tanggal", 2019)->result();
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_tu", "tanggal", $tahun)->result();
 		foreach ($pj as $key) {	
-				if($param== $key->nama_pj){
+				if(urldecode($param)== $key->nama_pj){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
 			        ->setCellValue('A2', 'Kode')
 			        ->setCellValue('B2', 'Nama Kegiatan')
@@ -1579,9 +1605,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_tu", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_tu", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
+					$total = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -1617,7 +1643,7 @@ class Home extends CI_Controller {
 			        $obj_writer = PHPExcel_IOFactory::createWriter($this->phpexcel, 'Excel2007');
 			        $obj_writer->save('php://output');
 				    	}
-				if($param== $key->nama_pj){break;}}
+				if(urldecode($param)== $key->nama_pj){break;}}
 
 					if($param== ''){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
@@ -1691,9 +1717,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_tu", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_tu", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
+					$total = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -1720,7 +1746,7 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getStyle('A2:L2')->applyFromArray($styleTop);
 			        $this->phpexcel->setActiveSheetIndex(0)->getStyle('L2:L'.($row-1))->applyFromArray($styleRight);
 			        $this->phpexcel->setActiveSheetIndex(0)->getStyle('A2:A'.($row-1))->applyFromArray($styleLeft);
-					 $this->phpexcel->setActiveSheetIndex(0)->getStyle('A' . ($row-1).':L'.($row-1))->applyFromArray($styleBottom);
+					$this->phpexcel->setActiveSheetIndex(0)->getStyle('A' . ($row-1).':L'.($row-1))->applyFromArray($styleBottom);
 
 			        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 			        header('Content-Disposition: attachment;filename="'.date('d-m-Y').'-laporan-kegiatan.xlsx"');
@@ -1732,11 +1758,11 @@ class Home extends CI_Controller {
 	//ending
 	}
 	
-	function print_laporanPenindakan($param=''){
+	function print_laporanPenindakan($tahun, $param=''){
 		$this->load->library('PHPExcel');
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan", "tanggal", 2019)->result();
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan", "tanggal", $tahun)->result();
 		foreach ($pj as $key) {	
-				if($param== $key->nama_pj){
+				if(urldecode($param)== $key->nama_pj){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
 			        ->setCellValue('A2', 'Kode')
 			        ->setCellValue('B2', 'Nama Kegiatan')
@@ -1808,9 +1834,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_penindakan", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_penindakan", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
+					$total = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -1846,9 +1872,9 @@ class Home extends CI_Controller {
 			        $obj_writer = PHPExcel_IOFactory::createWriter($this->phpexcel, 'Excel2007');
 			        $obj_writer->save('php://output');
 				    	}
-				if($param== $key->nama_pj){break;}}
+				if(urldecode($param)== $key->nama_pj){break;}}
 
-					if($param== ''){
+					if(urldecode($param)== ''){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
 			        ->setCellValue('A2', 'Kode')
 			        ->setCellValue('B2', 'Nama Kegiatan')
@@ -1920,9 +1946,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_penindakan", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_penindakan", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
+					$total = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -1961,11 +1987,11 @@ class Home extends CI_Controller {
 	//ending
 	}
 
-	function print_laporanPengujian($param=''){
+	function print_laporanPengujian($tahun, $param=''){
 		$this->load->library('PHPExcel');
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian", "tanggal", 2019)->result();
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian", "tanggal", $tahun)->result();
 		foreach ($pj as $key) {	
-				if($param== $key->nama_pj){
+				if(urldecode($param)== $key->nama_pj){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
 			        ->setCellValue('A2', 'Kode')
 			        ->setCellValue('B2', 'Nama Kegiatan')
@@ -2037,9 +2063,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_pengujian", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_pengujian", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
+					$total = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -2075,7 +2101,7 @@ class Home extends CI_Controller {
 			        $obj_writer = PHPExcel_IOFactory::createWriter($this->phpexcel, 'Excel2007');
 			        $obj_writer->save('php://output');
 				    	}
-				if($param== $key->nama_pj){break;}}
+				if(urldecode($param)== $key->nama_pj){break;}}
 
 					if($param== ''){
 					 $this->phpexcel->setActiveSheetIndex(0)->setCellValue('A1', 'Tanggal : '.date('d-m-Y'))					
@@ -2149,9 +2175,9 @@ class Home extends CI_Controller {
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('K')->setAutoSize(true);
 			        $this->phpexcel->setActiveSheetIndex(0)->getColumnDimension('L')->setAutoSize(true);
 
-			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_pengujian", "nama_pj","tanggal", $param, 2019)->result_array();
-					$total = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-					$subtotal = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			        $detail = $this->sentril_model->get_all_data2019("tbl_kegiatan_pengujian", "nama_pj","tanggal", urldecode($param), $tahun)->result_array();
+					$total = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+					$subtotal = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 
 					$row=3;
 					foreach($detail as $data){
@@ -2331,14 +2357,15 @@ class Home extends CI_Controller {
 			}
 		}			
 	}
-	function cetak_pdf(){
-				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal",2019)->result_array();
-				$data['row1'] = $this->sentril_model->get_all_data("tbl_kegiatan_infokom","tanggal",2019)->result_array();
-				$data['row2'] = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian","tanggal",2019)->result_array();
-				$data['row3'] = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan","tanggal",2019)->result_array();
-				$data['row4'] = $this->sentril_model->get_all_data("tbl_kegiatan_tu","tanggal",2019)->result_array();
-				$data['total'] = $this->sentril_model->get_total_kegiatan_all(2019)->row_array();
-				$data['subtotal'] = $this->sentril_model->get_total_subkegiatan_all(2019)->row_array();
+	function cetak_pdf1(){
+				$year = date('Y');
+				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal",$year)->result_array();
+				$data['row1'] = $this->sentril_model->get_all_data("tbl_kegiatan_infokom","tanggal",$year)->result_array();
+				$data['row2'] = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian","tanggal",$year)->result_array();
+				$data['row3'] = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan","tanggal",$year)->result_array();
+				$data['row4'] = $this->sentril_model->get_all_data("tbl_kegiatan_tu","tanggal",$year)->result_array();
+				$data['total'] = $this->sentril_model->get_total_kegiatan_all($year)->row_array();
+				$data['subtotal'] = $this->sentril_model->get_total_subkegiatan_all($year)->row_array();
 				$this->load->view("spuser/cetaksemua",$data);
 				
 		      	$paper_size  = 'A4'; //paper size
@@ -2354,12 +2381,13 @@ class Home extends CI_Controller {
 					
 	}
 
-	function cetak_pdf2019($param=''){
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan", "tanggal", 2019)->result();
+	function cetak_pdf($tahun, $param=''){
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan", "tanggal", $tahun)->result();
+		$urldec = urldecode($param);
 		if ($param == '') {
-				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal",2019)->result_array();
-				$data['total'] = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-				$data['subtotal'] = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal",$tahun)->result_array();
+				$data['total'] = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+				$data['subtotal'] = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 				$this->load->view("spuser/cetak",$data);
 				
 		      	$paper_size  = 'A4'; //paper size
@@ -2373,10 +2401,10 @@ class Home extends CI_Controller {
 		        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}
 		foreach ($pj as $key) {
-			if ($param == $key->nama_pj) {
-			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan", "nama_pj", "tanggal", $param, 2019)->result_array();
-			$data['total'] = $this->sentril_model->get_total_kegiatan(2019)->row_array();
-			$data['subtotal'] = $this->sentril_model->get_total_subkegiatan(2019)->row_array();
+			if ($urldec == $key->nama_pj) {
+			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan", "nama_pj", "tanggal", $urldec, $tahun)->result_array();
+			$data['total'] = $this->sentril_model->get_total_kegiatan($tahun)->row_array();
+			$data['subtotal'] = $this->sentril_model->get_total_subkegiatan($tahun)->row_array();
 			$this->load->view("spuser/cetak",$data);
 			
 	      	$paper_size  = 'A4'; //paper size
@@ -2389,17 +2417,18 @@ class Home extends CI_Controller {
 	        $this->dompdf->render();
 	        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}	
-			if ($param == $key->nama_pj) {
+			if ($urldec == $key->nama_pj) {
 				break;
 			}
 		}			
 	}
-	function cetak_pdfTu($param=''){
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_tu", "tanggal", 2019)->result();
+	function cetak_pdfTu($tahun, $param=''){
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_tu", "tanggal", $tahun)->result();
+		$urldec = urldecode($param);
 		if ($param == '') {
-				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_tu","tanggal",2019)->result_array();
-				$data['total'] = $this->sentril_model->get_total_kegiatanTu(2019)->row_array();
-				$data['subtotal'] = $this->sentril_model->get_total_subkegiatanTu(2019)->row_array();
+				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_tu","tanggal",$tahun)->result_array();
+				$data['total'] = $this->sentril_model->get_total_kegiatanTu($tahun)->row_array();
+				$data['subtotal'] = $this->sentril_model->get_total_subkegiatanTu($tahun)->row_array();
 				$this->load->view("spuser/tu/cetak",$data);
 				
 		      	$paper_size  = 'A4'; //paper size
@@ -2413,8 +2442,8 @@ class Home extends CI_Controller {
 		        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}
 		foreach ($pj as $key) {
-			if ($param == $key->nama_pj) {
-			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan_tu", "nama_pj", "tanggal", $param, 2019)->result_array();
+			if ($urldec== $key->nama_pj) {
+			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan_tu", "nama_pj", "tanggal", $urldec, $tahun)->result_array();
 			$data['total'] = $this->sentril_model->get_total_kegiatanTu(2019)->row_array();
 			$data['subtotal'] = $this->sentril_model->get_total_subkegiatanTu(2019)->row_array();
 			$this->load->view("spuser/tu/cetak",$data);
@@ -2429,18 +2458,19 @@ class Home extends CI_Controller {
 	        $this->dompdf->render();
 	        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}	
-			if ($param == $key->nama_pj) {
+			if ($urldec == $key->nama_pj) {
 				break;
 			}
 		}			
 	}
 
-	function cetak_pdfinfokom($param=''){
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_infokom", "tanggal", 2019)->result();
+	function cetak_pdfinfokom($tahun, $param=''){
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_infokom", "tanggal", $tahun)->result();
+		$urldec = urldecode($param);
 		if ($param == '') {
-				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_infokom","tanggal",2019)->result_array();
-				$data['total'] = $this->sentril_model->get_total_kegiatanInfokom(2019)->row_array();
-				$data['subtotal'] = $this->sentril_model->get_total_subkegiatanInfokom(2019)->row_array();
+				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_infokom","tanggal",$tahun)->result_array();
+				$data['total'] = $this->sentril_model->get_total_kegiatanInfokom($tahun)->row_array();
+				$data['subtotal'] = $this->sentril_model->get_total_subkegiatanInfokom($tahun)->row_array();
 				$this->load->view("spuser/infokom/cetak",$data);
 				
 		      	$paper_size  = 'A4'; //paper size
@@ -2454,10 +2484,10 @@ class Home extends CI_Controller {
 		        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}
 		foreach ($pj as $key) {
-			if ($param == $key->nama_pj) {
-			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj", "tanggal", $param, 2019)->result_array();
-			$data['total'] = $this->sentril_model->get_total_kegiatanInfokom(2019)->row_array();
-			$data['subtotal'] = $this->sentril_model->get_total_subkegiatanInfokom(2019)->row_array();
+			if ($urldec == $key->nama_pj) {
+			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan_infokom", "nama_pj", "tanggal", $urldec, $tahun)->result_array();
+			$data['total'] = $this->sentril_model->get_total_kegiatanInfokom($tahun)->row_array();
+			$data['subtotal'] = $this->sentril_model->get_total_subkegiatanInfokom($tahun)->row_array();
 			$this->load->view("spuser/infokom/cetak",$data);
 			
 	      	$paper_size  = 'A4'; //paper size
@@ -2470,18 +2500,19 @@ class Home extends CI_Controller {
 	        $this->dompdf->render();
 	        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}	
-			if ($param == $key->nama_pj) {
+			if ($urldec == $key->nama_pj) {
 				break;
 			}
 		}			
 	}
 
-	function cetak_pdfpenindakan($param=''){
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan", "tanggal", 2019)->result();
+	function cetak_pdfpenindakan($tahun, $param=''){
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan", "tanggal", $tahun)->result();
+		$urldec = urldecode($param);
 		if ($param == '') {
-				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal",2019)->result_array();
-				$data['total'] = $this->sentril_model->get_total_kegiatanPenindakan(2019)->row_array();
-				$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPenindakan(2019)->row_array();
+				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan","tanggal",$tahun)->result_array();
+				$data['total'] = $this->sentril_model->get_total_kegiatanPenindakan($tahun)->row_array();
+				$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPenindakan($tahun)->row_array();
 				$this->load->view("spuser/penindakan/cetak",$data);
 				
 		      	$paper_size  = 'A4'; //paper size
@@ -2495,10 +2526,10 @@ class Home extends CI_Controller {
 		        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}
 		foreach ($pj as $key) {
-			if ($param == $key->nama_pj) {
-			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan_penindakan", "nama_pj", "tanggal", $param, 2019)->result_array();
-			$data['total'] = $this->sentril_model->get_total_kegiatanPenindakan(2019)->row_array();
-			$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPenindakan(2019)->row_array();
+			if ($urldec == $key->nama_pj) {
+			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan_penindakan", "nama_pj", "tanggal", $urldec, $tahun)->result_array();
+			$data['total'] = $this->sentril_model->get_total_kegiatanPenindakan($tahun)->row_array();
+			$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPenindakan($tahun)->row_array();
 			$this->load->view("spuser/penindakan/cetak",$data);
 			
 	      	$paper_size  = 'A4'; //paper size
@@ -2511,19 +2542,20 @@ class Home extends CI_Controller {
 	        $this->dompdf->render();
 	        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}	
-			if ($param == $key->nama_pj) {
+			if ($urldec == $key->nama_pj) {
 				break;
 			}
 		}			
 	}
 
 
-	function cetak_pdfpengujian($param=''){
-		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian", "tanggal", 2019)->result();
+	function cetak_pdfpengujian($tahun, $param=''){
+		$pj = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian", "tanggal", $tahun)->result();
+		$urldec = urldecode($param);
 		if ($param == '') {
-				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian","tanggal",2019)->result_array();
-				$data['total'] = $this->sentril_model->get_total_kegiatanPengujian(2019)->row_array();
-				$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPengujian(2019)->row_array();
+				$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian","tanggal",$tahun)->result_array();
+				$data['total'] = $this->sentril_model->get_total_kegiatanPengujian($tahun)->row_array();
+				$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPengujian($tahun)->row_array();
 				$this->load->view("spuser/pengujian/cetak",$data);
 				
 		      	$paper_size  = 'A4'; //paper size
@@ -2537,10 +2569,10 @@ class Home extends CI_Controller {
 		        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}
 		foreach ($pj as $key) {
-			if ($param == $key->nama_pj) {
-			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan_pengujian", "nama_pj", "tanggal", $param, 2019)->result_array();
-			$data['total'] = $this->sentril_model->get_total_kegiatanPengujian(2019)->row_array();
-			$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPengujian(2019)->row_array();
+			if ($urldec == $key->nama_pj) {
+			$data['row'] = $this->sentril_model->get_all_data2019("tbl_kegiatan_pengujian", "nama_pj", "tanggal", $urldec, $tahun)->result_array();
+			$data['total'] = $this->sentril_model->get_total_kegiatanPengujian($tahun)->row_array();
+			$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPengujian($tahun)->row_array();
 			$this->load->view("spuser/pengujian/cetak",$data);
 			
 	      	$paper_size  = 'A4'; //paper size
@@ -2553,7 +2585,7 @@ class Home extends CI_Controller {
 	        $this->dompdf->render();
 	        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));	
 			}	
-			if ($param == $key->nama_pj) {
+			if ($urldec	 == $key->nama_pj) {
 				break;
 			}
 		}			
@@ -2577,8 +2609,10 @@ class Home extends CI_Controller {
         $this->dompdf->render();
         $this->dompdf->stream("laporan.pdf", array('Attachment'=>0));
 	}
-	function kegiatanTu(){
-		
+	function kegiatanTu($param=""){
+			if($param==""){
+				$param = date('Y');
+			}
 			if(isset($_POST['ubah'])){
 				$id = $this->input->post('id');
 				$nama = $this->input->post('nama');
@@ -2625,11 +2659,14 @@ class Home extends CI_Controller {
 
 			}	
 				//$data['row'] = $this->sentril_model->get_kegiatan_su()->result_array();
-		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_tu","tanggal", 2019)->result_array();
-		$data['total'] = $this->sentril_model->get_total_kegiatanTu(2019)->row_array();
-		$data['subtotal'] = $this->sentril_model->get_total_subkegiatanTu(2019)->row_array();
-		$data['group'] = $this->sentril_model->get_group_unit("tbl_kegiatan_tu",2019);
+		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_tu","tanggal", $param)->result_array();
+		$data['total'] = $this->sentril_model->get_total_kegiatanTu($param)->row_array();
+		$data['subtotal'] = $this->sentril_model->get_total_subkegiatanTu($param)->row_array();
+		$data['group'] = $this->sentril_model->get_group_unit("tbl_kegiatan_tu",$param);
+		$data['tahun'] = $this->db->query('SELECT * FROM tbl_tahun')->result();
+		// var_dump($data['tahun']);die;
 		$this->session->set_flashdata('unit', 'Tu');
+		$this->session->set_flashdata('tahun', $param);
 		
 		//var_dump($data);die;
 		$this->load->view('spuser/templates/header_table');
@@ -2637,7 +2674,10 @@ class Home extends CI_Controller {
 		$this->load->view('spuser/templates/footer_table');
 		$this->load->view('spuser/tu/kegiatan_script');
 	}
-	function kegiatanInfokom(){
+	function kegiatanInfokom($param=""){
+		if($param==""){
+			$param = date('Y');
+		}
 		if(isset($_POST['ubah'])){
 				$id = $this->input->post('id');
 				$nama = $this->input->post('nama');
@@ -2683,11 +2723,13 @@ class Home extends CI_Controller {
 				}
 
 			}	
-		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_infokom","tanggal", 2019)->result_array();
-		$data['total'] = $this->sentril_model->get_total_kegiatanInfokom(2019)->row_array();
-		$data['subtotal'] = $this->sentril_model->get_total_subkegiatanInfokom(2019)->row_array();
-		$data['group'] = $this->sentril_model->get_group_unit("tbl_kegiatan_infokom",2019);
+		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_infokom","tanggal", $param)->result_array();
+		$data['total'] = $this->sentril_model->get_total_kegiatanInfokom($param)->row_array();
+		$data['subtotal'] = $this->sentril_model->get_total_subkegiatanInfokom($param)->row_array();
+		$data['group'] = $this->sentril_model->get_group_unit("tbl_kegiatan_infokom",$param);
+		$data['tahun'] = $this->db->query('SELECT * FROM tbl_tahun')->result();
 		$this->session->set_flashdata('unit', 'infokom');
+		$this->session->set_flashdata('tahun', $param);
 		
 		//var_dump($data);die;
 		$this->load->view('spuser/templates/header_table');
@@ -2695,7 +2737,10 @@ class Home extends CI_Controller {
 		$this->load->view('spuser/templates/footer_table');
 		$this->load->view('spuser/infokom/kegiatan_script');
 	}
-	function kegiatanPengujian(){
+	function kegiatanPengujian($param=""){
+		if($param==""){
+			$param = date('Y');
+		}
 		if(isset($_POST['ubah'])){
 				$id = $this->input->post('id');
 				$nama = $this->input->post('nama');
@@ -2741,19 +2786,24 @@ class Home extends CI_Controller {
 				}
 
 			}	
-		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian","tanggal", 2019)->result_array();
-		$data['total'] = $this->sentril_model->get_total_kegiatanPengujian(2019)->row_array();
-		$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPengujian(2019)->row_array();
-		$data['group'] = $this->sentril_model->get_group_unit("tbl_kegiatan_pengujian",2019);
+		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_pengujian","tanggal", $param)->result_array();
+		$data['total'] = $this->sentril_model->get_total_kegiatanPengujian($param)->row_array();
+		$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPengujian($param)->row_array();
+		$data['group'] = $this->sentril_model->get_group_unit("tbl_kegiatan_pengujian",$param);
+		$data['tahun'] = $this->db->query('SELECT * FROM tbl_tahun')->result();
 		$this->session->set_flashdata('unit', 'pengujian');
-		
+		$this->session->set_flashdata('tahun', $param);
+
 		//var_dump($data);die;
 		$this->load->view('spuser/templates/header_table');
 		$this->load->view('spuser/pengujian/kegiatan',$data);
 		$this->load->view('spuser/templates/footer_table');
 		$this->load->view('spuser/pengujian/kegiatan_script');
 	}
-	function kegiatanPenindakan(){
+	function kegiatanPenindakan($param=""){
+		if($param==""){
+			$param = date('Y');
+		}
 		if(isset($_POST['ubah'])){
 				$id = $this->input->post('id');
 				$nama = $this->input->post('nama');
@@ -2799,11 +2849,13 @@ class Home extends CI_Controller {
 				}
 
 			}	
-		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan","tanggal", 2019)->result_array();
-		$data['total'] = $this->sentril_model->get_total_kegiatanPenindakan(2019)->row_array();
-		$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPenindakan(2019)->row_array();
-		$data['group'] = $this->sentril_model->get_group_unit("tbl_kegiatan_penindakan",2019);
+		$data['row'] = $this->sentril_model->get_all_data("tbl_kegiatan_penindakan","tanggal", $param)->result_array();
+		$data['total'] = $this->sentril_model->get_total_kegiatanPenindakan($param)->row_array();
+		$data['subtotal'] = $this->sentril_model->get_total_subkegiatanPenindakan($param)->row_array();
+		$data['group'] = $this->sentril_model->get_group_unit("tbl_kegiatan_penindakan",$param);
+		$data['tahun'] = $this->db->query('SELECT * FROM tbl_tahun')->result();
 		$this->session->set_flashdata('unit', 'penindakan');
+		$this->session->set_flashdata('tahun', $param);
 		
 		//var_dump($data);die;
 		$this->load->view('spuser/templates/header_table');

@@ -49,9 +49,20 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input id="lokasi" type="text" name="tanggal" placeholder="Input tanggal dan bulan"  class="form-control col-md-7 col-xs-12" required="required">
-                          <input type="hidden" name="tahun" value="2019" > 
-                          <span class="form-control-feedback right" aria-hidden="true"> 2019   </span>
+                          <!-- <input type="hidden" name="tahun" value="2019" >  -->
                         </div>
+                      </div>
+                      <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id">Tahun <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select id="inputN" class="form-control col-md-7 col-xs-12" name="tahun" placeholder="id kegiatan" type="text" required="required">
+                            <?php foreach($tahun as $tahun){?>
+                              <option value="<?= $tahun->tahun?>" <?php if(date('Y')==$tahun->tahun){echo "selected";}?>><?php echo $tahun->tahun ;?></option>
+                            <?php }?>
+                          </select>
+                        </div>
+
                       </div>
                       <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="anggaran" >Anggaran <span class="required">*</span>
